@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
 import NoteCard from './NoteCard';
 
 type Note = {
@@ -19,7 +18,6 @@ export default function SharedNotesList() {
   const supabase = createClient();
   const [sharedNotes, setSharedNotes] = useState<Note[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -77,7 +75,7 @@ export default function SharedNotesList() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sharedNotes.map((note) => (
-            <NoteCard note={note} onEdit={onEdit} onDelete={onDelete} />
+            <NoteCard note={note} key={note.id} onEdit={onEdit} onDelete={onDelete} />
           ))}
         </div>
       )}

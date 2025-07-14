@@ -8,7 +8,6 @@ import Underline from '@tiptap/extension-underline';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
-import { encodeStateAsUpdate } from 'yjs';
 import Image from '@tiptap/extension-image';
 import { Table } from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
@@ -176,60 +175,60 @@ const DocumentEditor: React.FC<DocumentEditorProps> = ({ doc }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (!doc?.doc_id || !ydoc) return;
+  useEffect(() => {
+    if (!doc?.doc_id || !ydoc) return;
 
-  //   const channel = supabase.channel(`doc-${doc.doc_id}`);
+    const channel = supabase.channel(`doc-${doc.doc_id}`);
 
-  //   // Listen for Y.js updates
-  //   const updateHandler = (update: Uint8Array) => {
-  //     const encodedUpdate = uint8ArrayToBase64(update);
-  //     console.log('Sending update:', encodedUpdate);
+    // Listen for Y.js updates
+    const updateHandler = (update: Uint8Array) => {
+      const encodedUpdate = uint8ArrayToBase64(update);
+      console.log('Sending update:', encodedUpdate);
 
-  //     // Send update to other clients
-  //     channel.send({
-  //       type: 'broadcast',
-  //       event: 'yjs-update',
-  //       payload: { update: encodedUpdate },
-  //     });
+      // Send update to other clients
+      // channel.send({
+      //   type: 'broadcast',
+      //   event: 'yjs-update',
+      //   payload: { update: encodedUpdate },
+      // });
 
-  //     // Save content to database
-  //     saveContentToSupabase();
-  //   };
+      // Save content to database
+      saveContentToSupabase();
+    };
 
-  //   const awarenessUpdateHandler = (update: Uint8Array, origin: any) => {
-  //     if (origin !== 'remote') {
-  //       const encodedUpdate = uint8ArrayToBase64(update);
-  //       channel.send({
-  //         type: 'broadcast',
-  //         event: 'yjs-update',
-  //         payload: { update: encodedUpdate },
-  //       });
-  //       saveContentToSupabase();
-  //     }
-  //   };
+    const awarenessUpdateHandler = (update: Uint8Array, origin: any) => {
+      if (origin !== 'remote') {
+        const encodedUpdate = uint8ArrayToBase64(update);
+        channel.send({
+          type: 'broadcast',
+          event: 'yjs-update',
+          payload: { update: encodedUpdate },
+        });
+        saveContentToSupabase();
+      }
+    };
 
-  //   ydoc.on('update', awarenessUpdateHandler);
+    ydoc.on('update', awarenessUpdateHandler);
 
-  //   // Listen for updates from other clients
-  //   channel.on('broadcast', { event: 'yjs-update' }, (event) => {
-  //     try {
-  //       const update = base64ToUint8Array(event.payload.update);
-  //       Y.applyUpdate(ydoc, update, 'remote');
-  //     } catch (err) {
-  //       console.error('Error applying update:', err);
-  //     }
-  //   });
+    // Listen for updates from other clients
+    channel.on('broadcast', { event: 'yjs-update' }, (event: any) => {
+      try {
+        const update = base64ToUint8Array(event.payload.update);
+        // Y.applyUpdate(ydoc, update, 'remote');
+      } catch (err) {
+        console.error('Error applying update:', err);
+      }
+    });
 
-  //   channel.subscribe((status) => {
-  //     setIsConnected(status === 'SUBSCRIBED');
-  //   });
+    channel.subscribe((status: any) => {
+      setIsConnected(status === 'SUBSCRIBED');
+    });
 
-  //   return () => {
-  //     ydoc.off('update', updateHandler);
-  //     channel.unsubscribe();
-  //   };
-  // }, [doc?.doc_id, ydoc, saveContentToSupabase]);
+    return () => {
+      ydoc.off('update', updateHandler);
+      channel.unsubscribe();
+    };
+  }, [doc?.doc_id, ydoc, saveContentToSupabase]);
 
   const insertImage = () => {
     const url = prompt('Enter image URL');

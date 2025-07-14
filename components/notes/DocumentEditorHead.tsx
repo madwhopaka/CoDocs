@@ -1,4 +1,4 @@
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Share2 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 

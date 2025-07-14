@@ -1,9 +1,8 @@
 'use client';
-import DocumentEditor from '@/components/notes/DocumentEditor';
 import React, { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { set } from 'date-fns';
+import DocumentEditor from '../../../components/notes/DocumentEditor';
 
 export default function Page({ params }: { params: Promise<{ uuid: string }> }) {
   const router = useRouter();

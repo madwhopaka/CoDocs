@@ -59,6 +59,7 @@ export default function NoteCard({ note, onEdit, onDelete, handleClick }: NoteCa
       const plainText = extractText(contentJson).trim();
       return plainText || 'No content';
     } catch (error) {
+      console.log(error);
       // If parsing fails, treat as plain text
       return note.content || 'No content';
     }
