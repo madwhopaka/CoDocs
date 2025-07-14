@@ -10,14 +10,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
 
-  useEffect(() => {
-    // Simulate loading delay
-    console.log('user', user);
-    if (user) {
-      setIsLoading(false);
-    }
-  }, [user]);
-
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -33,10 +25,6 @@ export default function Home() {
     hidden: { y: 20, opacity: 0 },
     show: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 } },
   };
-
-  if (isLoading) {
-    return <div className="bg-white min-h-screen"></div>;
-  }
 
   return (
     <div className="bg-white min-h-screen">
